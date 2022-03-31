@@ -1,6 +1,8 @@
 package purplecrayon
 
 type Canvas interface {
+  Referrable
+
   // Get the width of the canvas
   Width() float64
 
@@ -9,7 +11,7 @@ type Canvas interface {
 
   // Create a new canvas which edits the same physical canvas
   // but inside a sub window.
-  SubWindow(Point, Point) Canvas
+  SubWindow(topLeft, bottomRight Point) Canvas
 
   // Draw a rectangle inside the canvas
   Rect() Rect
@@ -21,15 +23,22 @@ type Canvas interface {
   Text() Text
 
   // Create a derived canvas which draws to a group.
-  Group() Canvas
+  Group() Group
 
   // Create a derived canvas which draws to a mask.
-  Mask() Canvas
+  Mask() Mask
+}
 
-  // Closes the current operation on the canvas.
-  // If the canvas is the root canvas, it will close the underlying Writer.
-  // If the canvas is a derived canvas like a group or a mask, it will close the tag.
-  Close() Reference
+type Group interface {
+  Canvas
+  Transformable
+  Paintable
+}
+
+type Mask interface {
+  Canvas
+  Transformable
+  Paintable
 }
 
 type Transformable interface {
@@ -44,6 +53,7 @@ type Paintable interface {
   LinearGradient(Reference)
   FontFamily(string)
   FontSize(float64)
+  CompositeMask(Reference)
 }
 
 // Referrables are objects which can have references.
@@ -142,8 +152,16 @@ type RGBA struct {
   A uint8
 }
 
+// A point.
 type Point struct {
   X float64
   Y float64
+}
+
+// Add two points.
+func (p Point) Add(o Point) Point {
+  return Point{
+    X: p.X, Y: p.Y,
+  }
 }
 
