@@ -9,10 +9,6 @@ type Canvas interface {
   // Get the height of the canvas
   Height() float64
 
-  // Create a new canvas which edits the same physical canvas
-  // but inside a sub window.
-  SubWindow(topLeft, bottomRight Point) Canvas
-
   // Draw a rectangle inside the canvas
   Rect() Rect
 
@@ -47,10 +43,15 @@ type Transformable interface {
 }
 
 type Paintable interface {
-  Transparent()
-  RGB(RGB)
-  RGBA(RGBA)
-  LinearGradient(Reference)
+  FillTransparent()
+  FillRGB(RGB)
+  FillRGBA(RGBA)
+  Fill(Reference)
+  StrokeWidth(float64)
+  StrokeRGB(RGB)
+  StrokeRGBA(RGBA)
+  StrokeTransparent()
+  Stroke(Reference)
   FontFamily(string)
   FontSize(float64)
   CompositeMask(Reference)
@@ -161,7 +162,13 @@ type Point struct {
 // Add two points.
 func (p Point) Add(o Point) Point {
   return Point{
-    X: p.X, Y: p.Y,
+    X: p.X + o.X, Y: p.Y + o.Y,
+  }
+}
+
+func (p Point) Sub(o Point) Point {
+  return Point{
+    X: p.X - o.X, Y: p.Y - o.Y,
   }
 }
 
