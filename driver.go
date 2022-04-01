@@ -14,32 +14,12 @@ type Canvas interface {
 
   // Begin a path.
   Cursor() Cursor
-
-  // Start writing text.
-  Text() Text
-
-  // Create a derived canvas which draws to a group.
-  Group() Group
-
-  // Create a derived canvas which draws to a mask.
-  Mask() Mask
-}
-
-type Group interface {
-  Canvas
-  Transformable
-  Paintable
-}
-
-type Mask interface {
-  Canvas
-  Transformable
-  Paintable
 }
 
 type Transformable interface {
   Translate(delta Point)
   Scale(float64)
+  Rotate(degrees float64)
 }
 
 type Paintable interface {
@@ -52,16 +32,10 @@ type Paintable interface {
   StrokeRGBA(RGBA)
   StrokeTransparent()
   Stroke(Reference)
-  FontFamily(string)
-  FontSize(float64)
-  CompositeMask(Reference)
 }
 
 // Referrables are objects which can have references.
 type Referrable interface {
-  // Sets the reference for the object.
-  Reference(string)
-
   // Closes the object and creates a reference for other objects to refer to it.
   Close() Reference
 }
@@ -96,14 +70,6 @@ type Cursor interface {
 
   // Finish the path.
   Close() Reference
-}
-
-type Text interface {
-  Referrable
-  Transformable
-  Paintable
-  Text(string)
-  Path(Reference)
 }
 
 type Rect interface {
