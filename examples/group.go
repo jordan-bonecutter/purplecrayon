@@ -40,15 +40,13 @@ func main() {
 	gCanv := g.Open()
 
 	r := gCanv.Rect()
-	r.Width(20)
-	r.Height(50)
+	r.Width(20).Height(50)
 	r.FillRGB(pc.RGB{255, 0, 0})
 	r.Transform().Translate(pc.Point{10, 10}).Finish()
 	r.Close()
 
 	circle := gCanv.Circle()
-	circle.Center(pc.Point{50, 50})
-	circle.Radius(20)
+	circle.Center(pc.Point{50, 50}).Radius(20)
 	circle.Fill(ref)
 	circle.Close()
 

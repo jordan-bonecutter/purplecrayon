@@ -132,25 +132,25 @@ type Path interface {
 
 type Cursor interface {
 	// Move the cursor to an absolute point.
-	MoveTo(Point)
+	MoveTo(Point) Cursor
 
 	// Move the cursor to a relative point.
-	MoveToRel(Point)
+	MoveToRel(Point) Cursor
 
 	// Draw a line to an absolute point.
-	LineTo(Point)
+	LineTo(Point) Cursor
 
 	// Draw a line to a relative point.
-	LineToRel(Point)
+	LineToRel(Point) Cursor
 
 	// Draw an absolute quadratic bezier curve.
-	QuadTo(Point, Point)
+	QuadTo(Point, Point) Cursor
 
 	// Draw a relative quadratic bezier curve.
-	QuadToRel(Point, Point)
+	QuadToRel(Point, Point) Cursor
 
 	// Zips up the path to where it started.
-	Zip()
+	Zip() Cursor
 
 	// Finishes the cursor movement.
 	// Not close because it returns no reference!
@@ -163,9 +163,9 @@ type Rect interface {
 	Referrable
 	Transformable
 	Paintable
-	TopLeft(p Point)
-	Width(float64)
-	Height(float64)
+	TopLeft(p Point) Rect
+	Width(float64) Rect
+	Height(float64) Rect
 }
 
 // A circle
@@ -173,8 +173,8 @@ type Circle interface {
 	Referrable
 	Transformable
 	Paintable
-	Center(Point)
-	Radius(float64)
+	Center(Point) Circle
+	Radius(float64) Circle
 }
 
 // A linear gradient may have multiple color stops along a line.
@@ -187,7 +187,7 @@ type LinearGradient interface {
 	// is at coordinate (0, 0) and the bottom right is at (1, 1).
 	// Once the gradient is used (0, 0) and (1, 1) are mapped to the bounds
 	// in an affine manner.
-	SetLine(p0, p1 Point)
+	SetLine(p0, p1 Point) LinearGradient
 
 	// the object by which stops are added to the gradient.
 	GradientStops() GradientStops
