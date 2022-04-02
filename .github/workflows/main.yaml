@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-go@v2
       
       - name: Install golint
-        run: go get -u golang.org/x/lint/golang
+        run: go get -u golang.org/x/lint/golint
 
       - name: Format Go Code
         run: gofmt -w .
