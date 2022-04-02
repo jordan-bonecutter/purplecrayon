@@ -1,3 +1,24 @@
+// purplecrayon is a drawing library written in Go.
+// While it can support an arbitrary backend, it only supports svg for now.
+// 
+// The main interaction is via the Canvas. A canvas represents the interface between
+// the frontend and the backend, allowing the programmer to create primitives like 
+// rectangles, circles, paths, and gradients. You can create such an SVG canvas via:
+//  canv, err := pc.NewCanvas("svg", 1920, 1080, w)
+// as long as the svg component has been imported via:
+//  import _ "github.com/jordan-bonecutter/purplecrayon/svg"
+// 
+// Always remember to close your objects with Close() so they're drawn to the canvas!
+// 
+// purplecrayon can be extended to support any other backend by:
+//
+// 1. Implement the defined interfaces
+//
+// 2. Registering the library via
+//  pc.Register("myBackend", NewMyBackendCanvas)
+//
+// 3. Instantiating your backend with
+//  pc.NewCanvas("myBackend", width, height, writer)
 package purplecrayon
 
 import (
