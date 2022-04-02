@@ -18,10 +18,10 @@ func makeSvgPaintable() svgPaintable {
 func (s svgPaintable) compile() []string {
 	ret := make([]string, len(s.attrs))
 	idx := 0
-  sortedMapIter(s.attrs, func(k, v string) {
+	sortedMapIter(s.attrs, func(k, v string) {
 		ret[idx] = fmt.Sprintf(`%s="%s"`, k, v)
 		idx++
-  })
+	})
 	return ret
 }
 
