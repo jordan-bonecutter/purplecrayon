@@ -22,7 +22,7 @@ type svg struct {
 }
 
 func (svg *svg) FormatF64(f64 float64) string {
-  return fmt.Sprintf("%f", f64)
+	return fmt.Sprintf("%f", f64)
 }
 
 type canvas struct {
@@ -56,10 +56,10 @@ func NewSVGCanvas(width, height float64, writer io.Writer) (pcCanvas pc.Canvas) 
 		object: makeObject(root, "svg"),
 	}
 
-  canv.Attr("width").F64(width).Finish()
-  canv.Attr("height").F64(height).Finish()
-  canv.Attr("xmlns").Str(XMLNS_SVG).Finish()
-  canv.Stop()
+	canv.Attr("width").F64(width).Finish()
+	canv.Attr("height").F64(height).Finish()
+	canv.Attr("xmlns").Str(XMLNS_SVG).Finish()
+	canv.Stop()
 
 	pcCanvas = canv
 

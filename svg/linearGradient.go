@@ -1,7 +1,7 @@
 package svg
 
 import (
-  pc "github.com/jordan-bonecutter/purplecrayon"
+	pc "github.com/jordan-bonecutter/purplecrayon"
 	"github.com/jordan-bonecutter/purplecrayon/core"
 )
 
@@ -16,17 +16,17 @@ func makeLinearGradient(svg *svg) *linearGradient {
 }
 
 func (g *linearGradient) SetLine(p0, p1 core.Point) {
-  g.Attr("x1").F64(p0.X).Finish()
-  g.Attr("y1").F64(p0.Y).Finish()
-  g.Attr("x2").F64(p1.X).Finish()
-  g.Attr("y2").F64(p1.Y).Finish()
+	g.Attr("x1").F64(p0.X).Finish()
+	g.Attr("y1").F64(p0.Y).Finish()
+	g.Attr("x2").F64(p1.X).Finish()
+	g.Attr("y2").F64(p1.Y).Finish()
 }
 
 func (g *linearGradient) GradientStops() pc.GradientStops {
-  g.Stop()
-  return gradientStops{g.object.svg}
+	g.Stop()
+	return gradientStops{g.object.svg}
 }
 
 func (g *linearGradient) Close() core.Reference {
-  return g.VerboseClose()
+	return g.VerboseClose()
 }

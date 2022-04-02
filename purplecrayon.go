@@ -84,7 +84,7 @@ type Mask interface {
 // Any object which can be transformed
 // Note: The transform must be finished before working on other attributes!
 type Transformable interface {
-  Transform() Transform
+	Transform() Transform
 }
 
 type Transform interface {
@@ -92,10 +92,10 @@ type Transform interface {
 	Scale(float64) Transform
 	Rotate(degrees float64) Transform
 
-  // Finish the current transformation.
-  // This method is not called Close because it doesn't return a reference!
-  // In other words, transforms are not referrable.
-  Finish()
+	// Finish the current transformation.
+	// This method is not called Close because it doesn't return a reference!
+	// In other words, transforms are not referrable.
+	Finish()
 }
 
 // Any object which can be painted
@@ -124,7 +124,7 @@ type Path interface {
 	Transformable
 	Paintable
 
-  Cursor() Cursor
+	Cursor() Cursor
 
 	// Finish the path.
 	Close() Reference
@@ -152,10 +152,10 @@ type Cursor interface {
 	// Zips up the path to where it started.
 	Zip()
 
-  // Finishes the cursor movement.
-  // Not close because it returns no reference!
-  // The reference is held in the enclosing Path
-  Finish()
+	// Finishes the cursor movement.
+	// Not close because it returns no reference!
+	// The reference is held in the enclosing Path
+	Finish()
 }
 
 // A rectangle
@@ -180,7 +180,7 @@ type Circle interface {
 // A linear gradient may have multiple color stops along a line.
 // Modifications to a gradient may only occur before it has been used by Set
 type LinearGradient interface {
-  Referrable
+	Referrable
 
 	// Sets the line along which the gradient varies.
 	// This line is always in a "hypothetical space" where the top left corner
@@ -189,23 +189,23 @@ type LinearGradient interface {
 	// in an affine manner.
 	SetLine(p0, p1 Point)
 
-  // the object by which stops are added to the gradient.
-  GradientStops() GradientStops
+	// the object by which stops are added to the gradient.
+	GradientStops() GradientStops
 }
 
 type GradientStop interface {
-  RGB(RGB) GradientStop
-  RGBA(RGBA) GradientStop
-  Position(float64) GradientStop
-  Finish()
+	RGB(RGB) GradientStop
+	RGBA(RGBA) GradientStop
+	Position(float64) GradientStop
+	Finish()
 }
 
 type GradientStops interface {
-  // Add a gradient stop to the parent gradient
-  Stop() GradientStop
+	// Add a gradient stop to the parent gradient
+	Stop() GradientStop
 
-  // Finish adding stops to the gradient
-  Finish()
+	// Finish adding stops to the gradient
+	Finish()
 }
 
 // A function which serves as a driver for a purplecrayon backend

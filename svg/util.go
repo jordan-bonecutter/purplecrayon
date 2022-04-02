@@ -5,15 +5,15 @@ import (
 )
 
 type basicObject struct {
-  object
+	object
 }
 
 func makeBasicObject(svg *svg, name string) basicObject {
-  return basicObject{
-    object: makeObject(svg, name),
-  }
+	return basicObject{
+		object: makeObject(svg, name),
+	}
 }
 
 func (b basicObject) Close() core.Reference {
-  return b.AbbreviatedClose()
+	return b.AbbreviatedClose()
 }

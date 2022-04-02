@@ -25,25 +25,25 @@ func main() {
 	}, pc.Point{
 		X: 1, Y: 1,
 	})
-  gradientStops := gradient.GradientStops()
+	gradientStops := gradient.GradientStops()
 	gradientStops.Stop().Position(0.1).RGB(pc.RGB{
 		255, 120, 0,
 	}).Finish()
 	gradientStops.Stop().Position(0.8).RGB(pc.RGB{
 		255, 0, 200,
 	}).Finish()
-  gradientStops.Finish()
+	gradientStops.Finish()
 	ref := gradient.Close()
 
 	g := canv.Group()
-  g.Transform().Rotate(45).Finish()
+	g.Transform().Rotate(45).Finish()
 	gCanv := g.Open()
 
 	r := gCanv.Rect()
 	r.Width(20)
 	r.Height(50)
 	r.FillRGB(pc.RGB{255, 0, 0})
-  r.Transform().Translate(pc.Point{10, 10}).Finish()
+	r.Transform().Translate(pc.Point{10, 10}).Finish()
 	r.Close()
 
 	circle := gCanv.Circle()
