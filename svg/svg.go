@@ -102,5 +102,5 @@ func (c canvas) Group() pc.Group {
 }
 
 func (c canvas) Mask() pc.Mask {
-  return makeMask(c.svg, c)
+	return makeMask(c.svg, c)
 }

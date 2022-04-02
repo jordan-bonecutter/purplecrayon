@@ -62,5 +62,5 @@ func (s svgPaintable) Stroke(ref core.Reference) {
 }
 
 func (s svgPaintable) CompositeMask(ref core.Reference) {
-  s.attrs["mask"] = svgRef(ref)
+	s.attrs["mask"] = svgRef(ref)
 }

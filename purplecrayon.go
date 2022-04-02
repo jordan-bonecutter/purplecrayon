@@ -58,8 +58,8 @@ type Canvas interface {
 	// Create a group which draws to a subgroup in this canvas
 	Group() Group
 
-  // Create a mask which draws to a submask in this canvas
-  Mask() Mask
+	// Create a mask which draws to a submask in this canvas
+	Mask() Mask
 }
 
 // A group of objects which can be transformed and painted together.
@@ -76,9 +76,9 @@ type Group interface {
 // A group of objects which together may be used as a compositing mask.
 // Works similarly to the Group.
 type Mask interface {
-  Transformable
-  Paintable
-  Open() Canvas
+	Transformable
+	Paintable
+	Open() Canvas
 }
 
 // Any object which can be transformed
@@ -99,7 +99,7 @@ type Paintable interface {
 	StrokeRGBA(RGBA)
 	StrokeTransparent()
 	Stroke(Reference)
-  CompositeMask(Reference)
+	CompositeMask(Reference)
 }
 
 // Referrables are objects which can have references.
