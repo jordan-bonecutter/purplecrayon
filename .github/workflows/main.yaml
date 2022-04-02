@@ -21,11 +21,10 @@ jobs:
       - name: Format Go Code
         run: gofmt -w .
 
-      - name: Run go vet
-        run: go vet .
-
-      - name: Run go lint
-        run: golint .
+      - name: Run go vet & golint
+        run: |
+          go vet .
+          golint .
 
       - name: Run Go Test
         run: go test .
