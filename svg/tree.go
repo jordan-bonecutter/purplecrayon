@@ -12,7 +12,7 @@ type tree struct {
 
 func makeTree(svg *svg, canv canvas, name string) tree {
 	return tree{
-		canvas:    canv,
+		canvas: canv,
 		object: makeObject(svg, name),
 	}
 }

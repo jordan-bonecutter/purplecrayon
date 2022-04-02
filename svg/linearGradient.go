@@ -13,7 +13,7 @@ type linearGradient struct {
 
 func makeLinearGradient(svg *svg) *linearGradient {
 	return &linearGradient{
-		svg:       svg,
+		svg:    svg,
 		object: makeObject(svg, "linearGradient"),
 	}
 }

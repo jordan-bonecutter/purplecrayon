@@ -20,10 +20,10 @@ type object struct {
 
 func makeObject(svg *svg, name string) object {
 	return object{
-		svg:              svg,
-		name:             name,
-		ref:              svg.nextReference(),
-		attrs:            make(map[string]string),
+		svg:           svg,
+		name:          name,
+		ref:           svg.nextReference(),
+		attrs:         make(map[string]string),
 		paintable:     makePaintable(),
 		transformable: makeTransformable(),
 	}

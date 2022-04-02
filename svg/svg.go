@@ -46,9 +46,9 @@ func NewSVGCanvas(width, height float64, writer io.Writer) (pcCanvas pc.Canvas) 
 		writer: writer,
 	}
 	canv := canvas{
-		svg:       root,
-		width:     width,
-		height:    height,
+		svg:    root,
+		width:  width,
+		height: height,
 		object: makeObject(root, "svg"),
 	}
 
