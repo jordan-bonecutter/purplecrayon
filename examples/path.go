@@ -21,10 +21,10 @@ func main() {
 
 	path := canv.Path()
 	path.Cursor().MoveTo(pc.Point{500, 500}).
-    LineToRel(pc.Point{100, 100}).
-    QuadToRel(pc.Point{-50, -50}, pc.Point{-70, -100}).
-    Zip().
-    Finish()
+		LineToRel(pc.Point{100, 100}).
+		QuadToRel(pc.Point{-50, -50}, pc.Point{-70, -100}).
+		Zip().
+		Finish()
 	path.StrokeWidth(5)
 	path.StrokeRGB(pc.RGB{200, 0, 200})
 	path.FillTransparent()
