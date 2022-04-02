@@ -99,6 +99,7 @@ type Paintable interface {
 	StrokeRGBA(RGBA)
 	StrokeTransparent()
 	Stroke(Reference)
+  CompositeMask(Reference)
 }
 
 // Referrables are objects which can have references.

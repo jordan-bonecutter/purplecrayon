@@ -60,3 +60,7 @@ func (s svgPaintable) StrokeTransparent() {
 func (s svgPaintable) Stroke(ref core.Reference) {
 	s.attrs["stroke"] = svgRef(ref)
 }
+
+func (s svgPaintable) CompositeMask(ref core.Reference) {
+  s.attrs["mask"] = svgRef(ref)
+}
