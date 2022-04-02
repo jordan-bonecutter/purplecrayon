@@ -15,19 +15,19 @@ func Example() {
 	defer canv.Close()
 
 	rect := canv.Rect()
-	rect.Width(100).Height(100).TopLeft(pc.Point{400, 500})
-	rect.FillRGB(pc.RGB{255, 0, 0})
+  rect.Width(100).Height(100).TopLeft(pc.Point{X: 400, Y: 500})
+  rect.FillRGB(pc.RGB{R: 255, G: 0, B: 0})
 	rect.Close()
 
 	gradient := canv.LinearGradient()
-	gradient.SetLine(pc.Point{0, 0}, pc.Point{1, 1})
+  gradient.SetLine(pc.Point{X: 0, Y: 0}, pc.Point{X: 1, Y: 1})
 	stops := gradient.GradientStops()
-	stops.Stop().Position(0.1).RGBA(pc.RGBA{255, 120, 0, 127}).Finish()
-	stops.Stop().Position(0.9).RGBA(pc.RGBA{255, 0, 120, 255}).Finish()
+  stops.Stop().Position(0.1).RGBA(pc.RGBA{R: 255, G: 120, B: 0, A: 127}).Finish()
+  stops.Stop().Position(0.9).RGBA(pc.RGBA{R: 255, G: 0, B: 120, A: 255}).Finish()
 	stops.Finish()
 	ref := gradient.Close()
 
-	circle := canv.Circle().Center(pc.Point{1920 / 2, 1080 / 2}).Radius(400)
+  circle := canv.Circle().Center(pc.Point{X: 1920 / 2, Y: 1080 / 2}).Radius(400)
 	circle.Fill(ref)
 	circle.Close()
 
