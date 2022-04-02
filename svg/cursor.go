@@ -47,5 +47,5 @@ func (c *cursor) Zip() {
 
 func (c *cursor) Close() core.Reference {
 	c.Set("d", strings.Join(c.moves, " "))
-	return c.Close()
+	return c.object.Close()
 }

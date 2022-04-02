@@ -75,18 +75,15 @@ func (c canvas) Close() core.Reference {
 }
 
 func (c canvas) Rect() pc.Rect {
-	r := makeRect(c.svg)
-	return &r
+	return makeRect(c.svg)
 }
 
 func (c canvas) Circle() pc.Circle {
-	r := makeCircle(c.svg)
-	return &r
+	return makeCircle(c.svg)
 }
 
 func (c canvas) Cursor() pc.Cursor {
-	r := makeCursor(c.svg)
-	return r
+	return makeCursor(c.svg)
 }
 
 func (c canvas) LinearGradient() pc.LinearGradient {
