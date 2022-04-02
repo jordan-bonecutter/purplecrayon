@@ -86,6 +86,10 @@ func (c canvas) Circle() pc.Circle {
 	return makeCircle(c.svg)
 }
 
+func (c canvas) Ellipse() pc.Ellipse {
+  return makeEllipse(c.svg)
+}
+
 func (c canvas) Path() pc.Path {
 	return makePath(c.svg)
 }
