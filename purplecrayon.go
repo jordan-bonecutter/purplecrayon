@@ -49,8 +49,8 @@ type Canvas interface {
 	// Draw a circle inside the canvas
 	Circle() Circle
 
-  // Draw an ellipse inside the canvas
-  Ellipse() Ellipse
+	// Draw an ellipse inside the canvas
+	Ellipse() Ellipse
 
 	// Begin a path.
 	Path() Path
@@ -181,11 +181,11 @@ type Circle interface {
 }
 
 type Ellipse interface {
-  Referrable
-  Transformable
-  Paintable
-  Center(p Point) Ellipse
-  Radii(p Point) Ellipse
+	Referrable
+	Transformable
+	Paintable
+	Center(p Point) Ellipse
+	Radii(p Point) Ellipse
 }
 
 // A linear gradient may have multiple color stops along a line.
