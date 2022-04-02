@@ -37,11 +37,11 @@ type Reference = core.Reference
 type Canvas interface {
 	Referrable
 
-  // Return the width of the canvas
-  Width() float64
+	// Return the width of the canvas
+	Width() float64
 
-  // Return the height of the canvas
-  Height() float64
+	// Return the height of the canvas
+	Height() float64
 
 	// Draw a rectangle inside the canvas
 	Rect() Rect
@@ -55,8 +55,8 @@ type Canvas interface {
 	// Create a linear gradient
 	LinearGradient() LinearGradient
 
-  // Create a new canvas which draws to a subgroup in this canvas
-  Group() Group
+	// Create a new canvas which draws to a subgroup in this canvas
+	Group() Group
 }
 
 // A group of objects which can be transformed and painted together.
@@ -65,9 +65,9 @@ type Canvas interface {
 // refers to the same canvas from which the group was created but through a
 // layer of indirection, namely the group.
 type Group interface {
-  Transformable
-  Paintable
-  Open() Canvas
+	Transformable
+	Paintable
+	Open() Canvas
 }
 
 // Any object which can be transformed

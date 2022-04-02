@@ -13,7 +13,7 @@ type svgObject struct {
 	*svg
 	name  string
 	attrs map[string]string
-  ref core.Reference
+	ref   core.Reference
 	svgPaintable
 	svgTransformable
 }
@@ -22,7 +22,7 @@ func makeSvgObject(svg *svg, name string) svgObject {
 	return svgObject{
 		svg:              svg,
 		name:             name,
-    ref:              svg.nextReference(),
+		ref:              svg.nextReference(),
 		attrs:            make(map[string]string),
 		svgPaintable:     makeSvgPaintable(),
 		svgTransformable: makeSvgTransformable(),
@@ -34,13 +34,13 @@ func (o svgObject) Set(k, v string) {
 }
 
 func (o svgObject) Open() {
-  o.WriteString("\n<")
-  o.writeOpeningTagBody()
-  o.WriteString(">")
+	o.WriteString("\n<")
+	o.writeOpeningTagBody()
+	o.WriteString(">")
 }
 
 func (o svgObject) writeOpeningTagBody() core.Reference {
-  o.WriteString(fmt.Sprintf(`%s id="%s"`, o.name, string(o.ref)))
+	o.WriteString(fmt.Sprintf(`%s id="%s"`, o.name, string(o.ref)))
 	for k, v := range o.attrs {
 		o.svg.WriteString(fmt.Sprintf(` %s="%s"`, k, v))
 	}
@@ -53,11 +53,11 @@ func (o svgObject) writeOpeningTagBody() core.Reference {
 		o.WriteString(" " + compiled)
 	}
 
-  return o.ref
+	return o.ref
 }
 
 func (o svgObject) CloseChildren(children ...Closer) core.Reference {
-  o.Open()
+	o.Open()
 
 	for _, child := range children {
 		child.Close()
@@ -68,7 +68,7 @@ func (o svgObject) CloseChildren(children ...Closer) core.Reference {
 
 func (o svgObject) Close() core.Reference {
 	o.svg.WriteString("\n<")
-  o.writeOpeningTagBody()
+	o.writeOpeningTagBody()
 	o.WriteString(`/>`)
 
 	return o.ref
@@ -76,5 +76,5 @@ func (o svgObject) Close() core.Reference {
 
 func (o svgObject) ClosingTag() core.Reference {
 	o.WriteString(fmt.Sprintf("\n</%s>", o.name))
-  return o.ref
+	return o.ref
 }

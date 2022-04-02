@@ -33,9 +33,9 @@ func main() {
 	})
 	ref := gradient.Close()
 
-  g := canv.Group()
-  g.Rotate(45)
-  gCanv := g.Open()
+	g := canv.Group()
+	g.Rotate(45)
+	gCanv := g.Open()
 
 	r := gCanv.Rect()
 	r.Width(20)
@@ -50,7 +50,7 @@ func main() {
 	circle.Fill(ref)
 	circle.Close()
 
-  gCanv.Close()
+	gCanv.Close()
 
 	canv.Close()
 }
