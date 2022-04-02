@@ -25,7 +25,7 @@ type canvas struct {
 	svg    *svg
 	width  float64
 	height float64
-	svgObject
+	object
 }
 
 func (svg *svg) nextReference() core.Reference {
@@ -33,10 +33,6 @@ func (svg *svg) nextReference() core.Reference {
 		svg.objectCounter++
 	}()
 	return core.Reference(fmt.Sprintf("pcobj-%d", svg.objectCounter))
-}
-
-func topLevelClose() core.Reference {
-	return ""
 }
 
 func (s *svg) WriteString(str string) {
@@ -50,10 +46,10 @@ func NewSVGCanvas(width, height float64, writer io.Writer) (pcCanvas pc.Canvas) 
 		writer: writer,
 	}
 	canv := canvas{
-		svg:       root,
-		width:     width,
-		height:    height,
-		svgObject: makeSvgObject(root, "svg"),
+		svg:    root,
+		width:  width,
+		height: height,
+		object: makeObject(root, "svg"),
 	}
 
 	canv.Set("width", fmt.Sprintf("%f", width))
@@ -79,22 +75,19 @@ func (c canvas) Close() core.Reference {
 }
 
 func (c canvas) Rect() pc.Rect {
-	r := makeSvgRect(c.svg)
-	return &r
+	return makeRect(c.svg)
 }
 
 func (c canvas) Circle() pc.Circle {
-	r := makeSvgCircle(c.svg)
-	return &r
+	return makeCircle(c.svg)
 }
 
 func (c canvas) Cursor() pc.Cursor {
-	r := makeSvgCursor(c.svg)
-	return r
+	return makeCursor(c.svg)
 }
 
 func (c canvas) LinearGradient() pc.LinearGradient {
-	return makeSvgLinearGradient(c.svg)
+	return makeLinearGradient(c.svg)
 }
 
 func (c canvas) Group() pc.Group {

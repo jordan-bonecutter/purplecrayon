@@ -6,46 +6,46 @@ import (
 	"strings"
 )
 
-type svgCursor struct {
+type cursor struct {
 	moves []string
-	svgObject
+	object
 }
 
-func makeSvgCursor(svg *svg) *svgCursor {
-	return &svgCursor{
-		svgObject: makeSvgObject(svg, "path"),
+func makeCursor(svg *svg) *cursor {
+	return &cursor{
+		object: makeObject(svg, "path"),
 	}
 }
 
-func (s *svgCursor) MoveTo(p core.Point) {
-	s.moves = append(s.moves, fmt.Sprintf("M %f %f", p.X, p.Y))
+func (c *cursor) MoveTo(p core.Point) {
+	c.moves = append(c.moves, fmt.Sprintf("M %f %f", p.X, p.Y))
 }
 
-func (s *svgCursor) MoveToRel(p core.Point) {
-	s.moves = append(s.moves, fmt.Sprintf("m %f %f", p.X, p.Y))
+func (c *cursor) MoveToRel(p core.Point) {
+	c.moves = append(c.moves, fmt.Sprintf("m %f %f", p.X, p.Y))
 }
 
-func (s *svgCursor) LineTo(p core.Point) {
-	s.moves = append(s.moves, fmt.Sprintf("L %f %f", p.X, p.Y))
+func (c *cursor) LineTo(p core.Point) {
+	c.moves = append(c.moves, fmt.Sprintf("L %f %f", p.X, p.Y))
 }
 
-func (s *svgCursor) LineToRel(p core.Point) {
-	s.moves = append(s.moves, fmt.Sprintf("l %f %f", p.X, p.Y))
+func (c *cursor) LineToRel(p core.Point) {
+	c.moves = append(c.moves, fmt.Sprintf("l %f %f", p.X, p.Y))
 }
 
-func (s *svgCursor) QuadTo(p0, p1 core.Point) {
-	s.moves = append(s.moves, fmt.Sprintf("Q %f %f %f %f", p0.X, p0.Y, p1.X, p1.Y))
+func (c *cursor) QuadTo(p0, p1 core.Point) {
+	c.moves = append(c.moves, fmt.Sprintf("Q %f %f %f %f", p0.X, p0.Y, p1.X, p1.Y))
 }
 
-func (s *svgCursor) QuadToRel(p0, p1 core.Point) {
-	s.moves = append(s.moves, fmt.Sprintf("q %f %f %f %f", p0.X, p0.Y, p1.X, p1.Y))
+func (c *cursor) QuadToRel(p0, p1 core.Point) {
+	c.moves = append(c.moves, fmt.Sprintf("q %f %f %f %f", p0.X, p0.Y, p1.X, p1.Y))
 }
 
-func (s *svgCursor) Zip() {
-	s.moves = append(s.moves, "z")
+func (c *cursor) Zip() {
+	c.moves = append(c.moves, "z")
 }
 
-func (s *svgCursor) Close() core.Reference {
-	s.Set("d", strings.Join(s.moves, " "))
-	return s.svgObject.Close()
+func (c *cursor) Close() core.Reference {
+	c.Set("d", strings.Join(c.moves, " "))
+	return c.object.Close()
 }
