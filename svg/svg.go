@@ -100,3 +100,7 @@ func (c canvas) LinearGradient() pc.LinearGradient {
 func (c canvas) Group() pc.Group {
 	return makeGroup(c.svg, c)
 }
+
+func (c canvas) Mask() pc.Mask {
+  return makeMask(c.svg, c)
+}
