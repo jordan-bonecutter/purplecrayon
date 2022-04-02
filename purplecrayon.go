@@ -127,7 +127,7 @@ type LinearGradient interface {
 	Close() Reference
 }
 
-// A function which returns a driver for some backend
+// A function which serves as a driver for a purplecrayon backend
 type Driver func(width, height float64, w io.Writer) Canvas
 
 // All drivers which have been registered
