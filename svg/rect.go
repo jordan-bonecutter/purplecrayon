@@ -16,15 +16,15 @@ func makeRect(svg *svg) rect {
 func (r rect) TopLeft(p core.Point) pc.Rect {
 	r.Attr("x").F64(p.X).Finish()
 	r.Attr("y").F64(p.Y).Finish()
-  return r
+	return r
 }
 
 func (r rect) Width(w float64) pc.Rect {
 	r.Attr("width").F64(w).Finish()
-  return r
+	return r
 }
 
 func (r rect) Height(h float64) pc.Rect {
 	r.Attr("height").F64(h).Finish()
-  return r
+	return r
 }
