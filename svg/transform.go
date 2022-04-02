@@ -29,8 +29,8 @@ func (s svgTransformable) Rotate(degrees float64) {
 
 func (s svgTransformable) compile() []string {
 	transform := ""
-	for _, v := range s.attrs {
+  sortedMapIter(s.attrs, func(k, v string) {
 		transform += " " + v
-	}
+  })
 	return []string{fmt.Sprintf(`transform="%s"`, transform)}
 }

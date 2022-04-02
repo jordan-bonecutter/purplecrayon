@@ -41,9 +41,9 @@ func (o svgObject) Open() {
 
 func (o svgObject) writeOpeningTagBody() core.Reference {
 	o.WriteString(fmt.Sprintf(`%s id="%s"`, o.name, string(o.ref)))
-	for k, v := range o.attrs {
+  sortedMapIter(o.attrs, func(k, v string) {
 		o.svg.WriteString(fmt.Sprintf(` %s="%s"`, k, v))
-	}
+  })
 
 	for _, compiled := range o.svgPaintable.compile() {
 		o.WriteString(" " + compiled)

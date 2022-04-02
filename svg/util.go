@@ -3,7 +3,22 @@ package svg
 import (
 	"fmt"
 	"github.com/jordan-bonecutter/purplecrayon/core"
+  "sort"
 )
+
+func sortedMapIter(m map[string]string, f func(k, v string)) {
+  sortedKeys := make([]string, len(m))
+  idx := 0
+  for k := range m {
+    sortedKeys[idx] = k
+    idx++
+  }
+
+  sort.Strings(sortedKeys)
+  for _, k := range sortedKeys {
+    f(k, m[k])
+  }
+}
 
 func svgRGB(color core.RGB) string {
 	return fmt.Sprintf("rgb(%d, %d, %d)",
