@@ -1,5 +1,16 @@
 package purplecrayon
 
+import (
+  core "github.com/jordan-bonecutter/purplecrayon/core"
+  "io"
+  "fmt"
+)
+
+type Point = core.Point
+type RGB = core.RGB
+type RGBA = core.RGBA
+type Reference = core.Reference
+
 type Canvas interface {
   Referrable
 
@@ -42,8 +53,6 @@ type Referrable interface {
   // Closes the object and creates a reference for other objects to refer to it.
   Close() Reference
 }
-
-type Reference string
 
 type Cursor interface {
   Referrable
@@ -115,37 +124,34 @@ type LinearGradient interface {
   Close() Reference
 }
 
-// A color in RGB space.
-type RGB struct {
-  R uint8
-  G uint8
-  B uint8
-}
+// A function which returns a driver for some backend
+type Driver func(width, height float64, w io.Writer) Canvas
 
-// A color in RGBA space.
-type RGBA struct {
-  R uint8
-  G uint8
-  B uint8
-  A uint8
-}
+// All drivers which have been registered
+var registeredDrivers map[string]Driver
 
-// A point.
-type Point struct {
-  X float64
-  Y float64
-}
-
-// Add two points.
-func (p Point) Add(o Point) Point {
-  return Point{
-    X: p.X + o.X, Y: p.Y + o.Y,
+// Register a new driver
+func Register(name string, d Driver) {
+  if registeredDrivers == nil {
+    registeredDrivers = make(map[string]Driver)
   }
+
+  registeredDrivers[name] = d
 }
 
-func (p Point) Sub(o Point) Point {
-  return Point{
-    X: p.X - o.X, Y: p.Y - o.Y,
+var driverNotFoundError = fmt.Errorf("Driver not found!")
+
+// Create a new canvas for the given driver
+func NewCanvas(driver string, width, height float64, w io.Writer) (c Canvas, err error) {
+  if registeredDrivers == nil {
+    err = driverNotFoundError
   }
+
+  if lib, ok := registeredDrivers[driver]; ok {
+    c = lib(width, height, w) 
+  } else {
+    err = driverNotFoundError
+  }
+  return
 }
 

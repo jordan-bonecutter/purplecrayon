@@ -2,6 +2,7 @@ package main
 
 import (
   "os"
+  _ "github.com/jordan-bonecutter/purplecrayon/svg"
   pc "github.com/jordan-bonecutter/purplecrayon"
   "log"
 )
@@ -9,11 +10,14 @@ import (
 func main() {
   fi, err := os.Create("path.svg")
   if err != nil {
-    log.Fatalf("Failed opening test file: %s", err.Error())
+    log.Fatalf("Failed opening test file: %s\n", err.Error())
   }
   defer fi.Close()
 
-  canv := pc.NewSVGCanvas(1920, 1080, fi)
+  canv, err := pc.NewCanvas("svg", 1920, 1080, fi)
+  if err != nil {
+    log.Fatalf("Failed creating canvas: %s\n", err.Error())
+  }
 
   cursor := canv.Cursor()
   cursor.MoveTo(pc.Point{500, 500})

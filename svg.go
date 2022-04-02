@@ -211,15 +211,15 @@ func (s svgPaintable) FillTransparent() {
 }
 
 func (s svgPaintable) FillRGB(color RGB) {
-  s.attrs["fill"] = color.compiled()
+  s.attrs["fill"] = svgRGB(color)
 }
 
 func (s svgPaintable) FillRGBA(color RGBA) {
-  s.attrs["fill"] = color.compiled()
+  s.attrs["fill"] = svgRGBA(color)
 }
 
 func (s svgPaintable) Fill(ref Reference) {
-  s.attrs["fill"] = ref.compiled()
+  s.attrs["fill"] = svgRef(ref)
 }
 
 func (s svgPaintable) StrokeWidth(w float64) {
@@ -227,11 +227,11 @@ func (s svgPaintable) StrokeWidth(w float64) {
 }
 
 func (s svgPaintable) StrokeRGB(color RGB) {
-  s.attrs["stroke"] = color.compiled()
+  s.attrs["stroke"] = svgRGB(color)
 }
 
 func (s svgPaintable) StrokeRGBA(color RGBA) {
-  s.attrs["stroke"] = color.compiled()
+  s.attrs["stroke"] = svgRGBA(color)
 }
 
 func (s svgPaintable) StrokeTransparent() {
@@ -239,7 +239,7 @@ func (s svgPaintable) StrokeTransparent() {
 }
 
 func (s svgPaintable) Stroke(ref Reference) {
-  s.attrs["stroke"] = ref.compiled()
+  s.attrs["stroke"] = svgRef(ref)
 }
 
 type svgObject struct {
@@ -283,7 +283,7 @@ func (o svgObject) Close() Reference {
   return o.svg.nextReference()
 }
 
-func (color RGB) compiled() string {
+func svgRGB(color RGB) string {
   return fmt.Sprintf("rgb(%d, %d, %d)",
     color.R,
     color.G,
@@ -291,7 +291,7 @@ func (color RGB) compiled() string {
   )
 }
 
-func (color RGBA) compiled() string {
+func svgRGBA(color RGBA) string {
   return fmt.Sprintf("rgba(%d, %d, %d, %d)",
     color.R,
     color.G,
@@ -300,7 +300,7 @@ func (color RGBA) compiled() string {
   )
 }
 
-func (r Reference) compiled() string {
-  return fmt.Sprintf("url(#%s)", string(r))
+func svgRef(ref Reference) string {
+  return fmt.Sprintf("url(#%s)", string(ref))
 }
 
