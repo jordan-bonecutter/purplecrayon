@@ -3,6 +3,7 @@ package purplecrayon
 import (
   "fmt"
   "io"
+  "strings"
 )
 
 type svg struct {
@@ -63,71 +64,62 @@ func (s *svgCanvas) Rect() Rect {
   return &r
 }
 
+func (s *svgCanvas) Circle() Circle {
+  r := makeSvgCircle(s.svg)
+  return &r
+}
+
 func (s *svgCanvas) Cursor() Cursor {
   r := makeSvgCursor(s.svg)
   return r
 }
 
 type svgRect struct {
-  svg *svg
-  attrs map[string]string
-  svgPaintable
-  svgTransformable
+  svgObject
 }
 
 func makeSvgRect(svg *svg) svgRect {
-  return svgRect{
-    svg: svg,
-    attrs: make(map[string]string),
-    svgPaintable: makeSvgPaintable(),
-    svgTransformable: makeSvgTransformable(),
-  }
+  return svgRect{makeSvgObject(svg, "rect")}
 }
 
 func (s svgRect) TopLeft(p Point) {
-  s.attrs["x"] = fmt.Sprintf("%f", p.X)
-  s.attrs["y"] = fmt.Sprintf("%f", p.Y)
+  s.Set("x", fmt.Sprintf("%f", p.X))
+  s.Set("y", fmt.Sprintf("%f", p.Y))
 }
 
 func (s svgRect) Width(w float64) {
-  s.attrs["width"] = fmt.Sprintf("%f", w)
+  s.Set("width", fmt.Sprintf("%f", w))
 }
 
 func (s svgRect) Height(h float64) {
-  s.attrs["height"] = fmt.Sprintf("%f", h)
+  s.Set("height", fmt.Sprintf("%f", h))
 }
 
-func (s svgRect) Close() Reference {
-  w := s.svg.writer 
-  io.WriteString(w, "\n" + `<rect`)
-  for k, v := range s.attrs {
-    io.WriteString(w, fmt.Sprintf(` %s="%s"`, k, v))
-  }
+type svgCircle struct {
+  svgObject
+}
 
-  for _, compiled := range s.svgPaintable.compile() {
-    io.WriteString(w, " " + compiled)
-  }
+func makeSvgCircle(svg *svg) svgCircle {
+  return svgCircle{makeSvgObject(svg, "circle")}
+}
 
-  for _, compiled := range s.svgTransformable.compile() {
-    io.WriteString(w, " " + compiled)
-  }
-  io.WriteString(w, `/>`)
+func (s svgCircle) Center(p Point) {
+  s.Set("cx", fmt.Sprintf("%f", p.X))
+  s.Set("cy", fmt.Sprintf("%f", p.Y))
+}
 
-  return s.svg.nextReference()
+func (s svgCircle) Radius(r float64) {
+  s.Set("r", fmt.Sprintf("%f", r))
 }
 
 type svgCursor struct {
-  svg *svg
   moves []string
-  svgTransformable
-  svgPaintable
+  svgObject
 }
 
 func makeSvgCursor(svg *svg) *svgCursor {
   return &svgCursor{
-    svg: svg,
-    svgTransformable: makeSvgTransformable(),
-    svgPaintable: makeSvgPaintable(),
+    svgObject: makeSvgObject(svg, "path"),
   }
 }
 
@@ -160,23 +152,8 @@ func (s *svgCursor) Zip() {
 }
 
 func (s *svgCursor) Close() Reference {
-  w := s.svg.writer 
-  io.WriteString(w, `<path d="`)
-  for _, move := range s.moves {
-    io.WriteString(w, " " + move)
-  }
-  io.WriteString(w, `"`)
-
-  for _, compiled := range s.svgPaintable.compile() {
-    io.WriteString(w, " " + compiled)
-  }
-
-  for _, compiled := range s.svgTransformable.compile() {
-    io.WriteString(w, " " + compiled)
-  }
-  io.WriteString(w, `/>`)
-
-  return s.svg.nextReference()
+  s.Set("d", strings.Join(s.moves, " "))
+  return s.svgObject.Close()
 }
 
 type svgTransformable struct {
@@ -263,6 +240,47 @@ func (s svgPaintable) StrokeTransparent() {
 
 func (s svgPaintable) Stroke(ref Reference) {
   s.attrs["stroke"] = ref.compiled()
+}
+
+type svgObject struct {
+  *svg
+  name string
+  attrs map[string]string
+  svgPaintable
+  svgTransformable
+}
+
+func makeSvgObject(svg *svg, name string) svgObject {
+  return svgObject{
+    svg: svg,
+    name: name,
+    attrs: make(map[string]string),
+    svgPaintable: makeSvgPaintable(),
+    svgTransformable: makeSvgTransformable(),
+  }
+}
+
+func (o svgObject) Set(k, v string) {
+  o.attrs[k] = v
+}
+
+func (o svgObject) Close() Reference {
+  w := o.svg.writer 
+  io.WriteString(w, fmt.Sprintf("\n<%s", o.name))
+  for k, v := range o.attrs {
+    io.WriteString(w, fmt.Sprintf(` %s="%s"`, k, v))
+  }
+
+  for _, compiled := range o.svgPaintable.compile() {
+    io.WriteString(w, " " + compiled)
+  }
+
+  for _, compiled := range o.svgTransformable.compile() {
+    io.WriteString(w, " " + compiled)
+  }
+  io.WriteString(w, `/>`)
+
+  return o.svg.nextReference()
 }
 
 func (color RGB) compiled() string {

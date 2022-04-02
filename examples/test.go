@@ -22,6 +22,12 @@ func main() {
   r.Translate(pc.Point{10, 10})
   r.Close()
 
+  circle := canv.Circle()
+  circle.Center(pc.Point{50, 50})
+  circle.Radius(20)
+  circle.FillRGB(pc.RGB{200, 0, 200})
+  circle.Close()
+
   canv.Close()
 }
 

@@ -12,6 +12,9 @@ type Canvas interface {
   // Draw a rectangle inside the canvas
   Rect() Rect
 
+  // Draw a circle inside the canvas
+  Circle() Circle
+
   // Begin a path.
   Cursor() Cursor
 }
@@ -79,6 +82,14 @@ type Rect interface {
   TopLeft(p Point)
   Width(float64)
   Height(float64)
+}
+
+type Circle interface {
+  Referrable
+  Transformable
+  Paintable
+  Center(Point)
+  Radius(float64)
 }
 
 // A linear gradient may have multiple color stops along a line.
