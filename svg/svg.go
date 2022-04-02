@@ -8,7 +8,7 @@ import (
 )
 
 const (
-  XMLNS_SVG = "http://www.w3.org/2000/svg"
+	XMLNS_SVG = "http://www.w3.org/2000/svg"
 )
 
 // Register to purplecrayon
@@ -22,10 +22,10 @@ type svg struct {
 }
 
 type canvas struct {
-  svg *svg
-  width float64
-  height float64
-  svgObject
+	svg    *svg
+	width  float64
+	height float64
+	svgObject
 }
 
 func (svg *svg) nextReference() core.Reference {
@@ -49,17 +49,17 @@ func NewSVGCanvas(width, height float64, writer io.Writer) (pcCanvas pc.Canvas) 
 	root := &svg{
 		writer: writer,
 	}
-  canv := canvas{
-    svg: root,
-    width: width,
-    height: height,
-    svgObject: makeSvgObject(root, "svg"),
-  }
+	canv := canvas{
+		svg:       root,
+		width:     width,
+		height:    height,
+		svgObject: makeSvgObject(root, "svg"),
+	}
 
-  canv.Set("width", fmt.Sprintf("%f", width))
-  canv.Set("height", fmt.Sprintf("%f", height))
-  canv.Set("xmlns", XMLNS_SVG)
-  canv.Open()
+	canv.Set("width", fmt.Sprintf("%f", width))
+	canv.Set("height", fmt.Sprintf("%f", height))
+	canv.Set("xmlns", XMLNS_SVG)
+	canv.Open()
 
 	pcCanvas = canv
 
@@ -67,15 +67,15 @@ func NewSVGCanvas(width, height float64, writer io.Writer) (pcCanvas pc.Canvas) 
 }
 
 func (c canvas) Width() float64 {
-  return c.width
+	return c.width
 }
 
 func (c canvas) Height() float64 {
-  return c.height
+	return c.height
 }
 
 func (c canvas) Close() core.Reference {
-  return c.ClosingTag()
+	return c.ClosingTag()
 }
 
 func (c canvas) Rect() pc.Rect {
@@ -98,5 +98,5 @@ func (c canvas) LinearGradient() pc.LinearGradient {
 }
 
 func (c canvas) Group() pc.Group {
-  return makeGroup(c.svg, c)
+	return makeGroup(c.svg, c)
 }

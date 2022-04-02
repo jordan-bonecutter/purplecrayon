@@ -1,5 +1,6 @@
 # purplecrayon
 ![Lint and Test](https://github.com/jordan-bonecutter/purplecrayon/workflows/Main/badge.svg)
+[![Go Reference](https://pkg.go.dev/badge/github.com/jordan-bonecutter/purplecrayon.svg)](https://pkg.go.dev/github.com/jordan-bonecutter/purplecrayon)
 
 An SVG / Drawing library for GoLang
 
