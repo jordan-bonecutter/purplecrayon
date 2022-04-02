@@ -32,14 +32,16 @@ type RGB = core.RGB
 type RGBA = core.RGBA
 type Reference = core.Reference
 
+// The main interface for drawing with purplecrayon.
+// Only one operation should be open at a time, undefined behavior occurs otherwise.
 type Canvas interface {
 	Referrable
 
-	// Get the width of the canvas
-	Width() float64
+  // Return the width of the canvas
+  Width() float64
 
-	// Get the height of the canvas
-	Height() float64
+  // Return the height of the canvas
+  Height() float64
 
 	// Draw a rectangle inside the canvas
 	Rect() Rect
@@ -52,14 +54,30 @@ type Canvas interface {
 
 	// Create a linear gradient
 	LinearGradient() LinearGradient
+
+  // Create a new canvas which draws to a subgroup in this canvas
+  Group() Group
 }
 
+// A group of objects which can be transformed and painted together.
+// All transform / paint operations must be finished before calling Start.
+// The canvas returned by start is a "derived canvas", in that it eventually
+// refers to the same canvas from which the group was created but through a
+// layer of indirection, namely the group.
+type Group interface {
+  Transformable
+  Paintable
+  Open() Canvas
+}
+
+// Any object which can be transformed
 type Transformable interface {
 	Translate(delta Point)
 	Scale(float64)
 	Rotate(degrees float64)
 }
 
+// Any object which can be painted
 type Paintable interface {
 	FillTransparent()
 	FillRGB(RGB)
@@ -78,6 +96,7 @@ type Referrable interface {
 	Close() Reference
 }
 
+// Equivalent to an SVG path
 type Cursor interface {
 	Referrable
 	Transformable
@@ -108,6 +127,7 @@ type Cursor interface {
 	Close() Reference
 }
 
+// A rectangle
 type Rect interface {
 	Referrable
 	Transformable
@@ -117,6 +137,7 @@ type Rect interface {
 	Height(float64)
 }
 
+// A circle
 type Circle interface {
 	Referrable
 	Transformable
