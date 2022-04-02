@@ -5,31 +5,31 @@ import (
 	"github.com/jordan-bonecutter/purplecrayon/core"
 )
 
-type svgTransformable struct {
+type transformable struct {
 	attrs map[string]string
 }
 
-func makeSvgTransformable() svgTransformable {
-	return svgTransformable{
+func makeTransformable() transformable {
+	return transformable{
 		attrs: make(map[string]string),
 	}
 }
 
-func (s svgTransformable) Translate(p core.Point) {
-	s.attrs["translate"] = fmt.Sprintf("translate(%f, %f)", p.X, p.Y)
+func (t transformable) Translate(p core.Point) {
+	t.attrs["translate"] = fmt.Sprintf("translate(%f, %f)", p.X, p.Y)
 }
 
-func (s svgTransformable) Scale(scale float64) {
-	s.attrs["scale"] = fmt.Sprintf("scale(%f)", scale)
+func (t transformable) Scale(scale float64) {
+	t.attrs["scale"] = fmt.Sprintf("scale(%f)", scale)
 }
 
-func (s svgTransformable) Rotate(degrees float64) {
-	s.attrs["rotate"] = fmt.Sprintf("rotate(%f)", degrees)
+func (t transformable) Rotate(degrees float64) {
+	t.attrs["rotate"] = fmt.Sprintf("rotate(%f)", degrees)
 }
 
-func (s svgTransformable) compile() []string {
+func (t transformable) compile() []string {
 	transform := ""
-	sortedMapIter(s.attrs, func(k, v string) {
+	sortedMapIter(t.attrs, func(k, v string) {
 		transform += " " + v
 	})
 	return []string{fmt.Sprintf(`transform="%s"`, transform)}

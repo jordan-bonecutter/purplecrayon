@@ -5,23 +5,23 @@ import (
 	"github.com/jordan-bonecutter/purplecrayon/core"
 )
 
-type svgRect struct {
-	svgObject
+type rect struct {
+	object
 }
 
-func makeSvgRect(svg *svg) svgRect {
-	return svgRect{makeSvgObject(svg, "rect")}
+func makeRect(svg *svg) rect {
+	return rect{makeObject(svg, "rect")}
 }
 
-func (s svgRect) TopLeft(p core.Point) {
-	s.Set("x", fmt.Sprintf("%f", p.X))
-	s.Set("y", fmt.Sprintf("%f", p.Y))
+func (r rect) TopLeft(p core.Point) {
+	r.Set("x", fmt.Sprintf("%f", p.X))
+	r.Set("y", fmt.Sprintf("%f", p.Y))
 }
 
-func (s svgRect) Width(w float64) {
-	s.Set("width", fmt.Sprintf("%f", w))
+func (r rect) Width(w float64) {
+	r.Set("width", fmt.Sprintf("%f", w))
 }
 
-func (s svgRect) Height(h float64) {
-	s.Set("height", fmt.Sprintf("%f", h))
+func (r rect) Height(h float64) {
+	r.Set("height", fmt.Sprintf("%f", h))
 }

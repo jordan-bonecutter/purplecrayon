@@ -7,21 +7,21 @@ import (
 
 type tree struct {
 	canvas
-	svgObject
+	object
 }
 
 func makeTree(svg *svg, canv canvas, name string) tree {
 	return tree{
 		canvas:    canv,
-		svgObject: makeSvgObject(svg, name),
+		object: makeObject(svg, name),
 	}
 }
 
 func (t tree) Open() pc.Canvas {
-	t.svgObject.Open()
+	t.object.Open()
 	return t
 }
 
 func (t tree) Close() core.Reference {
-	return t.svgObject.ClosingTag()
+	return t.object.ClosingTag()
 }

@@ -9,54 +9,54 @@ type Closer interface {
 	Close() core.Reference
 }
 
-type svgObject struct {
+type object struct {
 	*svg
 	name  string
 	attrs map[string]string
 	ref   core.Reference
-	svgPaintable
-	svgTransformable
+	paintable
+	transformable
 }
 
-func makeSvgObject(svg *svg, name string) svgObject {
-	return svgObject{
+func makeObject(svg *svg, name string) object {
+	return object{
 		svg:              svg,
 		name:             name,
 		ref:              svg.nextReference(),
 		attrs:            make(map[string]string),
-		svgPaintable:     makeSvgPaintable(),
-		svgTransformable: makeSvgTransformable(),
+		paintable:     makePaintable(),
+		transformable: makeTransformable(),
 	}
 }
 
-func (o svgObject) Set(k, v string) {
+func (o object) Set(k, v string) {
 	o.attrs[k] = v
 }
 
-func (o svgObject) Open() {
+func (o object) Open() {
 	o.WriteString("\n<")
 	o.writeOpeningTagBody()
 	o.WriteString(">")
 }
 
-func (o svgObject) writeOpeningTagBody() core.Reference {
+func (o object) writeOpeningTagBody() core.Reference {
 	o.WriteString(fmt.Sprintf(`%s id="%s"`, o.name, string(o.ref)))
 	sortedMapIter(o.attrs, func(k, v string) {
 		o.svg.WriteString(fmt.Sprintf(` %s="%s"`, k, v))
 	})
 
-	for _, compiled := range o.svgPaintable.compile() {
+	for _, compiled := range o.paintable.compile() {
 		o.WriteString(" " + compiled)
 	}
 
-	for _, compiled := range o.svgTransformable.compile() {
+	for _, compiled := range o.transformable.compile() {
 		o.WriteString(" " + compiled)
 	}
 
 	return o.ref
 }
 
-func (o svgObject) CloseChildren(children ...Closer) core.Reference {
+func (o object) CloseChildren(children ...Closer) core.Reference {
 	o.Open()
 
 	for _, child := range children {
@@ -66,7 +66,7 @@ func (o svgObject) CloseChildren(children ...Closer) core.Reference {
 	return o.ClosingTag()
 }
 
-func (o svgObject) Close() core.Reference {
+func (o object) Close() core.Reference {
 	o.svg.WriteString("\n<")
 	o.writeOpeningTagBody()
 	o.WriteString(`/>`)
@@ -74,7 +74,7 @@ func (o svgObject) Close() core.Reference {
 	return o.ref
 }
 
-func (o svgObject) ClosingTag() core.Reference {
+func (o object) ClosingTag() core.Reference {
 	o.WriteString(fmt.Sprintf("\n</%s>", o.name))
 	return o.ref
 }
