@@ -5,7 +5,7 @@ import (
 	pc "github.com/jordan-bonecutter/purplecrayon"
 	core "github.com/jordan-bonecutter/purplecrayon/core"
 	"io"
-  "strconv"
+	"strconv"
 )
 
 const (
@@ -13,8 +13,8 @@ const (
 )
 
 const (
-  FLOAT_PRECISION = "floatPrecision"
-  FLOAT_PRECISION_HIGHEST = -1
+	FLOAT_PRECISION         = "floatPrecision"
+	FLOAT_PRECISION_HIGHEST = -1
 )
 
 // Register to purplecrayon
@@ -23,35 +23,35 @@ func init() {
 }
 
 type svg struct {
-	writer        io.Writer
-	objectCounter uint64
-  floatPrecision int
+	writer         io.Writer
+	objectCounter  uint64
+	floatPrecision int
 }
 
 func (svg *svg) FormatF64(f64 float64) string {
-  return strconv.FormatFloat(f64, 'f', svg.floatPrecision, 64)
+	return strconv.FormatFloat(f64, 'f', svg.floatPrecision, 64)
 }
 
 var UnknownKeyError = fmt.Errorf("Unknown configuration key")
 
 func (svg *svg) Configure(key string, value interface{}) error {
-  switch key {
-  case FLOAT_PRECISION:
-    return svg.ConfigureFloatPrecision(value)
-  default:
-    return UnknownKeyError
-  }
+	switch key {
+	case FLOAT_PRECISION:
+		return svg.ConfigureFloatPrecision(value)
+	default:
+		return UnknownKeyError
+	}
 }
 
 var RequiresIntError = fmt.Errorf("Float Precision must be of type int")
 
 func (svg *svg) ConfigureFloatPrecision(value interface{}) error {
-  if i, ok := value.(int); ok {
-    svg.floatPrecision = i
-    return nil
-  }
+	if i, ok := value.(int); ok {
+		svg.floatPrecision = i
+		return nil
+	}
 
-  return RequiresIntError
+	return RequiresIntError
 }
 
 type canvas struct {
@@ -76,8 +76,8 @@ func (s *svg) WriteString(str string) {
 func NewSVGCanvas(width, height float64, writer io.Writer) (pcCanvas pc.Canvas) {
 
 	root := &svg{
-		writer: writer,
-    floatPrecision: FLOAT_PRECISION_HIGHEST,
+		writer:         writer,
+		floatPrecision: FLOAT_PRECISION_HIGHEST,
 	}
 	canv := canvas{
 		svg:    root,

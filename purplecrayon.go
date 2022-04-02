@@ -37,9 +37,9 @@ type Reference = core.Reference
 type Canvas interface {
 	Referrable
 
-  // Set parameters for the current backend.
-  // Returns nil iff no error occurred.
-  Configure(key string, value interface{}) error
+	// Set parameters for the current backend.
+	// Returns nil iff no error occurred.
+	Configure(key string, value interface{}) error
 
 	// Return the width of the canvas
 	Width() float64
