@@ -28,6 +28,9 @@ type Canvas interface {
 
   // Begin a path.
   Cursor() Cursor
+
+  // Create a linear gradient
+  LinearGradient() LinearGradient
 }
 
 type Transformable interface {

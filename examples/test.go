@@ -19,6 +19,20 @@ func main() {
     log.Fatalf("Failed creating canvas: %s\n", err.Error())
   }
 
+  gradient := canv.LinearGradient()
+  gradient.SetLine(pc.Point{
+    X: 0, Y: 0,
+  }, pc.Point{
+    X: 1, Y: 1,
+  })
+  gradient.AddRGBStop(0.1, pc.RGB{
+    255, 120, 0,
+  })
+  gradient.AddRGBStop(0.8, pc.RGB{
+    255, 0, 200,
+  })
+  ref := gradient.Close()
+
   r := canv.Rect()
   r.Width(20)
   r.Height(50)
@@ -29,7 +43,7 @@ func main() {
   circle := canv.Circle()
   circle.Center(pc.Point{50, 50})
   circle.Radius(20)
-  circle.FillRGB(pc.RGB{200, 0, 200})
+  circle.Fill(ref)
   circle.Close()
 
   canv.Close()

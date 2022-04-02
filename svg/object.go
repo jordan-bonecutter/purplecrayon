@@ -5,6 +5,10 @@ import (
   "fmt"
 )
 
+type Closer interface {
+  Close() core.Reference
+}
+
 type svgObject struct {
   *svg
   name string
@@ -25,6 +29,32 @@ func makeSvgObject(svg *svg, name string) svgObject {
 
 func (o svgObject) Set(k, v string) {
   o.attrs[k] = v
+}
+
+func (o svgObject) CloseChildren(children ...Closer) core.Reference {
+  ref := o.svg.nextReference()
+  o.svg.WriteString(fmt.Sprintf("\n<%s", o.name))
+  for k, v := range o.attrs {
+    o.svg.WriteString(fmt.Sprintf(` %s="%s"`, k, v))
+  }
+  o.svg.WriteString(fmt.Sprintf(` id="%s"`, string(ref)))
+
+  for _, compiled := range o.svgPaintable.compile() {
+    o.WriteString(" " + compiled)
+  }
+
+  for _, compiled := range o.svgTransformable.compile() {
+    o.WriteString(" " + compiled)
+  }
+  o.WriteString(`>`)
+
+  for _, child := range children {
+    child.Close()
+  }
+
+  o.WriteString(fmt.Sprintf("\n</%s>", o.name))
+
+  return ref
 }
 
 func (o svgObject) Close() core.Reference {

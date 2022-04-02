@@ -77,3 +77,7 @@ func (s *svg) Cursor() pc.Cursor {
   return r
 }
 
+func (s *svg) LinearGradient() pc.LinearGradient {
+  return makeSvgLinearGradient(s)
+}
+
