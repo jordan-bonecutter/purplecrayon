@@ -50,7 +50,7 @@ type Canvas interface {
 	Circle() Circle
 
 	// Begin a path.
-	Cursor() Cursor
+	Path() Path
 
 	// Create a linear gradient
 	LinearGradient() LinearGradient
@@ -82,10 +82,20 @@ type Mask interface {
 }
 
 // Any object which can be transformed
+// Note: The transform must be finished before working on other attributes!
 type Transformable interface {
-	Translate(delta Point)
-	Scale(float64)
-	Rotate(degrees float64)
+  Transform() Transform
+}
+
+type Transform interface {
+	Translate(delta Point) Transform
+	Scale(float64) Transform
+	Rotate(degrees float64) Transform
+
+  // Finish the current transformation.
+  // This method is not called Close because it doesn't return a reference!
+  // In other words, transforms are not referrable.
+  Finish()
 }
 
 // Any object which can be painted
@@ -109,11 +119,18 @@ type Referrable interface {
 }
 
 // Equivalent to an SVG path
-type Cursor interface {
+type Path interface {
 	Referrable
 	Transformable
 	Paintable
 
+  Cursor() Cursor
+
+	// Finish the path.
+	Close() Reference
+}
+
+type Cursor interface {
 	// Move the cursor to an absolute point.
 	MoveTo(Point)
 
@@ -135,8 +152,10 @@ type Cursor interface {
 	// Zips up the path to where it started.
 	Zip()
 
-	// Finish the path.
-	Close() Reference
+  // Finishes the cursor movement.
+  // Not close because it returns no reference!
+  // The reference is held in the enclosing Path
+  Finish()
 }
 
 // A rectangle
@@ -161,7 +180,7 @@ type Circle interface {
 // A linear gradient may have multiple color stops along a line.
 // Modifications to a gradient may only occur before it has been used by Set
 type LinearGradient interface {
-	Referrable
+  Referrable
 
 	// Sets the line along which the gradient varies.
 	// This line is always in a "hypothetical space" where the top left corner
@@ -170,15 +189,23 @@ type LinearGradient interface {
 	// in an affine manner.
 	SetLine(p0, p1 Point)
 
-	// Add an rgb color stop at the given position along the line.
-	// Position varies from 0 to 1, where 0 will lie at p0 and 1 at p1.
-	AddRGBStop(position float64, rgb RGB)
+  // the object by which stops are added to the gradient.
+  GradientStops() GradientStops
+}
 
-	// Add an rgba color stop at the given position along the line.
-	// Position varies from 0 to 1, where 0 will lie at p0 and 1 at p1.
-	AddRGBAStop(position float64, rgba RGBA)
+type GradientStop interface {
+  RGB(RGB) GradientStop
+  RGBA(RGBA) GradientStop
+  Position(float64) GradientStop
+  Finish()
+}
 
-	Close() Reference
+type GradientStops interface {
+  // Add a gradient stop to the parent gradient
+  Stop() GradientStop
+
+  // Finish adding stops to the gradient
+  Finish()
 }
 
 // A function which serves as a driver for a purplecrayon backend

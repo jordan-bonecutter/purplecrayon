@@ -1,23 +1,22 @@
 package svg
 
 import (
-	"fmt"
 	"github.com/jordan-bonecutter/purplecrayon/core"
 )
 
 type circle struct {
-	object
+  basicObject
 }
 
 func makeCircle(svg *svg) circle {
-	return circle{makeObject(svg, "circle")}
+	return circle{makeBasicObject(svg, "circle")}
 }
 
-func (s circle) Center(p core.Point) {
-	s.Set("cx", fmt.Sprintf("%f", p.X))
-	s.Set("cy", fmt.Sprintf("%f", p.Y))
+func (c circle) Center(p core.Point) {
+  c.Attr("cx").F64(p.X).Finish()
+  c.Attr("cy").F64(p.Y).Finish()
 }
 
-func (s circle) Radius(r float64) {
-	s.Set("r", fmt.Sprintf("%f", r))
+func (c circle) Radius(r float64) {
+  c.Attr("r").F64(r).Finish()
 }
