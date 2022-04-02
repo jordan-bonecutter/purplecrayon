@@ -18,10 +18,10 @@ func makeTree(svg *svg, canv canvas, name string) tree {
 }
 
 func (t tree) Open() pc.Canvas {
-	t.object.Open()
+	t.Stop()
 	return t
 }
 
 func (t tree) Close() core.Reference {
-	return t.object.ClosingTag()
+	return t.VerboseClose()
 }

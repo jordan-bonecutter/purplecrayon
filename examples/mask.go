@@ -21,8 +21,10 @@ func main() {
 
 	grad := canv.LinearGradient()
 	grad.SetLine(pc.Point{0, 0}, pc.Point{1, 1})
-	grad.AddRGBStop(0, pc.RGB{255, 0, 0})
-	grad.AddRGBStop(1, pc.RGB{0, 0, 255})
+	stops := grad.GradientStops()
+	stops.Stop().Position(0).RGB(pc.RGB{255, 0, 0}).Finish()
+	stops.Stop().Position(1).RGB(pc.RGB{0, 0, 255}).Finish()
+	stops.Finish()
 	ref := grad.Close()
 
 	m := canv.Mask().Open()

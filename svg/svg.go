@@ -21,6 +21,10 @@ type svg struct {
 	objectCounter uint64
 }
 
+func (svg *svg) FormatF64(f64 float64) string {
+	return fmt.Sprintf("%f", f64)
+}
+
 type canvas struct {
 	svg    *svg
 	width  float64
@@ -52,10 +56,10 @@ func NewSVGCanvas(width, height float64, writer io.Writer) (pcCanvas pc.Canvas) 
 		object: makeObject(root, "svg"),
 	}
 
-	canv.Set("width", fmt.Sprintf("%f", width))
-	canv.Set("height", fmt.Sprintf("%f", height))
-	canv.Set("xmlns", XMLNS_SVG)
-	canv.Open()
+	canv.Attr("width").F64(width).Finish()
+	canv.Attr("height").F64(height).Finish()
+	canv.Attr("xmlns").Str(XMLNS_SVG).Finish()
+	canv.Stop()
 
 	pcCanvas = canv
 
@@ -71,7 +75,7 @@ func (c canvas) Height() float64 {
 }
 
 func (c canvas) Close() core.Reference {
-	return c.ClosingTag()
+	return c.VerboseClose()
 }
 
 func (c canvas) Rect() pc.Rect {
@@ -82,8 +86,8 @@ func (c canvas) Circle() pc.Circle {
 	return makeCircle(c.svg)
 }
 
-func (c canvas) Cursor() pc.Cursor {
-	return makeCursor(c.svg)
+func (c canvas) Path() pc.Path {
+	return makePath(c.svg)
 }
 
 func (c canvas) LinearGradient() pc.LinearGradient {

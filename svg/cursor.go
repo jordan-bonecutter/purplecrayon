@@ -1,51 +1,54 @@
 package svg
 
 import (
-	"fmt"
+	pc "github.com/jordan-bonecutter/purplecrayon"
 	"github.com/jordan-bonecutter/purplecrayon/core"
-	"strings"
 )
 
-type cursor struct {
-	moves []string
-	object
+type path struct {
+	basicObject
 }
 
-func makeCursor(svg *svg) *cursor {
-	return &cursor{
-		object: makeObject(svg, "path"),
+func makePath(svg *svg) path {
+	return path{makeBasicObject(svg, "path")}
+}
+
+func (p path) Cursor() pc.Cursor {
+	return p.Attr("d")
+}
+
+// The cursor is an extension of attr.
+func (c attr) cursorMove(action string, arguments ...float64) {
+	c.Str(" ").Str(action)
+	for _, arg := range arguments {
+		c.F64(arg).Str(" ")
 	}
 }
 
-func (c *cursor) MoveTo(p core.Point) {
-	c.moves = append(c.moves, fmt.Sprintf("M %f %f", p.X, p.Y))
+func (c attr) MoveTo(p core.Point) {
+	c.cursorMove("M", p.X, p.Y)
 }
 
-func (c *cursor) MoveToRel(p core.Point) {
-	c.moves = append(c.moves, fmt.Sprintf("m %f %f", p.X, p.Y))
+func (c attr) MoveToRel(p core.Point) {
+	c.cursorMove("m", p.X, p.Y)
 }
 
-func (c *cursor) LineTo(p core.Point) {
-	c.moves = append(c.moves, fmt.Sprintf("L %f %f", p.X, p.Y))
+func (c attr) LineTo(p core.Point) {
+	c.cursorMove("L", p.X, p.Y)
 }
 
-func (c *cursor) LineToRel(p core.Point) {
-	c.moves = append(c.moves, fmt.Sprintf("l %f %f", p.X, p.Y))
+func (c attr) LineToRel(p core.Point) {
+	c.cursorMove("l", p.X, p.Y)
 }
 
-func (c *cursor) QuadTo(p0, p1 core.Point) {
-	c.moves = append(c.moves, fmt.Sprintf("Q %f %f %f %f", p0.X, p0.Y, p1.X, p1.Y))
+func (c attr) QuadTo(p0, p1 core.Point) {
+	c.cursorMove("Q", p0.X, p0.Y, p1.X, p1.Y)
 }
 
-func (c *cursor) QuadToRel(p0, p1 core.Point) {
-	c.moves = append(c.moves, fmt.Sprintf("q %f %f %f %f", p0.X, p0.Y, p1.X, p1.Y))
+func (c attr) QuadToRel(p0, p1 core.Point) {
+	c.cursorMove("q", p0.X, p0.Y, p1.X, p1.Y)
 }
 
-func (c *cursor) Zip() {
-	c.moves = append(c.moves, "z")
-}
-
-func (c *cursor) Close() core.Reference {
-	c.Set("d", strings.Join(c.moves, " "))
-	return c.object.Close()
+func (c attr) Zip() {
+	c.cursorMove("z")
 }
