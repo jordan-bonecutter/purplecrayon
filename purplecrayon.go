@@ -1,4 +1,4 @@
-// purplecrayon is a drawing library written in Go.
+// Package purplecrayon is a drawing library written in Go.
 // While it can support an arbitrary backend, it only supports svg for now.
 //
 // The main interaction is via the Canvas. A canvas represents the interface between
@@ -27,12 +27,19 @@ import (
 	"io"
 )
 
+// Point is a point on a canvas
 type Point = core.Point
+
+// RGB is a color represented in RGB space
 type RGB = core.RGB
+
+// RGBA is a color represented in RGBA space
 type RGBA = core.RGBA
+
+// Reference is a reference to an object
 type Reference = core.Reference
 
-// The main interface for drawing with purplecrayon.
+// Canvas is the main interface for drawing with purplecrayon.
 // Only one operation should be open at a time, undefined behavior occurs otherwise.
 type Canvas interface {
 	Referrable
@@ -69,7 +76,7 @@ type Canvas interface {
 	Mask() Mask
 }
 
-// A group of objects which can be transformed and painted together.
+// Group is a collection of objects which can be transformed and painted together.
 // All transform / paint operations must be finished before calling Start.
 // The canvas returned by start is a "derived canvas", in that it eventually
 // refers to the same canvas from which the group was created but through a
@@ -80,7 +87,7 @@ type Group interface {
 	Open() Canvas
 }
 
-// A group of objects which together may be used as a compositing mask.
+// Mask objects contain a group of objects which together may be used as a compositing mask.
 // Works similarly to the Group.
 type Mask interface {
 	Transformable
@@ -88,12 +95,13 @@ type Mask interface {
 	Open() Canvas
 }
 
-// Any object which can be transformed
+// Transformable objects are any object which can be transformed.
 // Note: The transform must be finished before working on other attributes!
 type Transformable interface {
 	Transform() Transform
 }
 
+// Transform objects are instances of a transformations.
 type Transform interface {
 	Translate(delta Point) Transform
 	Scale(float64) Transform
@@ -105,7 +113,7 @@ type Transform interface {
 	Finish()
 }
 
-// Any object which can be painted
+// Paintable objects are any object which can be painted onto a canvas.
 type Paintable interface {
 	FillTransparent()
 	FillRGB(RGB)
@@ -119,13 +127,13 @@ type Paintable interface {
 	CompositeMask(Reference)
 }
 
-// Referrables are objects which can have references.
+// Referrable objects are objects which may return a reference to themselves for others to use.
 type Referrable interface {
 	// Closes the object and creates a reference for other objects to refer to it.
 	Close() Reference
 }
 
-// Equivalent to an SVG path
+// Path objects are generic shapes which can be drawn with cursors.
 type Path interface {
 	Referrable
 	Transformable
@@ -137,6 +145,7 @@ type Path interface {
 	Close() Reference
 }
 
+// Cursor objects allow arbitrary drawing of shapes on a canvas.
 type Cursor interface {
 	// Move the cursor to an absolute point.
 	MoveTo(Point) Cursor
@@ -165,7 +174,7 @@ type Cursor interface {
 	Finish()
 }
 
-// A rectangle
+// Rect objects are drawn as rectangles on a canvas.
 type Rect interface {
 	Referrable
 	Transformable
@@ -175,7 +184,7 @@ type Rect interface {
 	Height(float64) Rect
 }
 
-// A circle
+// Circle objects are drawn as circles on a canvas.
 type Circle interface {
 	Referrable
 	Transformable
@@ -184,6 +193,7 @@ type Circle interface {
 	Radius(float64) Circle
 }
 
+// Ellipse objects are drawn as ellpises on a canvas.
 type Ellipse interface {
 	Referrable
 	Transformable
@@ -192,8 +202,8 @@ type Ellipse interface {
 	Radii(p Point) Ellipse
 }
 
-// A linear gradient may have multiple color stops along a line.
-// Modifications to a gradient may only occur before it has been used by Set
+// LinearGradient objects return a reference to a linear gradient which can be used
+// as a fill or stroke for Paintable objects.
 type LinearGradient interface {
 	Referrable
 
@@ -208,6 +218,7 @@ type LinearGradient interface {
 	GradientStops() GradientStops
 }
 
+// GradientStop objects represent a fixed color stop in a gradient.
 type GradientStop interface {
 	RGB(RGB) GradientStop
 	RGBA(RGBA) GradientStop
@@ -215,6 +226,7 @@ type GradientStop interface {
 	Finish()
 }
 
+// GradientStops objects allow creation of GradientStop objects for a Gradient.
 type GradientStops interface {
 	// Add a gradient stop to the parent gradient
 	Stop() GradientStop
@@ -223,7 +235,7 @@ type GradientStops interface {
 	Finish()
 }
 
-// A function which serves as a driver for a purplecrayon backend
+// Driver functions return Canvas objects which implement the Canvas interface.
 type Driver func(width, height float64, w io.Writer) Canvas
 
 // All drivers which have been registered
@@ -238,18 +250,18 @@ func Register(name string, d Driver) {
 	registeredDrivers[name] = d
 }
 
-var driverNotFoundError = fmt.Errorf("Driver not found!")
+var errDriverNotFound = fmt.Errorf("Driver not found")
 
-// Create a new canvas for the given driver
+// NewCanvas creates a Canvas for the given regsitered Driver
 func NewCanvas(driver string, width, height float64, w io.Writer) (c Canvas, err error) {
 	if registeredDrivers == nil {
-		err = driverNotFoundError
+		err = errDriverNotFound
 	}
 
 	if lib, ok := registeredDrivers[driver]; ok {
 		c = lib(width, height, w)
 	} else {
-		err = driverNotFoundError
+		err = errDriverNotFound
 	}
 	return
 }

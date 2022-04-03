@@ -9,12 +9,16 @@ import (
 )
 
 const (
-	XMLNS_SVG = "http://www.w3.org/2000/svg"
+	// XmlnsSvg is the XML namespace for SVG files.
+	XmlnsSvg = "http://www.w3.org/2000/svg"
 )
 
 const (
-	FLOAT_PRECISION         = "floatPrecision"
-	FLOAT_PRECISION_HIGHEST = -1
+	// FloatPrecision is the key used to configure the output floating point precison.
+	FloatPrecision = "floatPrecision"
+
+	// FloatPrecisionHighest represents the highest floating point precision available.
+	FloatPrecisionHighest = -1
 )
 
 // Register to purplecrayon
@@ -32,18 +36,20 @@ func (svg *svg) FormatF64(f64 float64) string {
 	return strconv.FormatFloat(f64, 'f', svg.floatPrecision, 64)
 }
 
-var UnknownKeyError = fmt.Errorf("Unknown configuration key")
+// ErrUnknownKey is returned when the configuration key is not known.
+var ErrUnknownKey = fmt.Errorf("Unknown configuration key")
 
 func (svg *svg) Configure(key string, value interface{}) error {
 	switch key {
-	case FLOAT_PRECISION:
+	case FloatPrecision:
 		return svg.ConfigureFloatPrecision(value)
 	default:
-		return UnknownKeyError
+		return ErrUnknownKey
 	}
 }
 
-var RequiresIntError = fmt.Errorf("Float Precision must be of type int")
+// ErrRequiresInt is returned when the configuration key requires a value of int type.
+var ErrRequiresInt = fmt.Errorf("Float Precision must be of type int")
 
 func (svg *svg) ConfigureFloatPrecision(value interface{}) error {
 	if i, ok := value.(int); ok {
@@ -51,7 +57,7 @@ func (svg *svg) ConfigureFloatPrecision(value interface{}) error {
 		return nil
 	}
 
-	return RequiresIntError
+	return ErrRequiresInt
 }
 
 type canvas struct {
@@ -68,16 +74,16 @@ func (svg *svg) nextReference() core.Reference {
 	return core.Reference(fmt.Sprintf("pcobj-%d", svg.objectCounter))
 }
 
-func (s *svg) WriteString(str string) {
-	io.WriteString(s.writer, str)
+func (svg *svg) WriteString(str string) {
+	io.WriteString(svg.writer, str)
 }
 
-// Creates a new canvas which draws to an svg via the given io.Writer
+// NewSVGCanvas creates a new canvas which draws to an svg via the given io.Writer
 func NewSVGCanvas(width, height float64, writer io.Writer) (pcCanvas pc.Canvas) {
 
 	root := &svg{
 		writer:         writer,
-		floatPrecision: FLOAT_PRECISION_HIGHEST,
+		floatPrecision: FloatPrecisionHighest,
 	}
 	canv := canvas{
 		svg:    root,
@@ -88,7 +94,7 @@ func NewSVGCanvas(width, height float64, writer io.Writer) (pcCanvas pc.Canvas) 
 
 	canv.Attr("width").F64(width).Finish()
 	canv.Attr("height").F64(height).Finish()
-	canv.Attr("xmlns").Str(XMLNS_SVG).Finish()
+	canv.Attr("xmlns").Str(XmlnsSvg).Finish()
 	canv.Stop()
 
 	pcCanvas = canv
