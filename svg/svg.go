@@ -9,15 +9,15 @@ import (
 )
 
 const (
-  // XmlnsSvg is the XML namespace for SVG files.
+	// XmlnsSvg is the XML namespace for SVG files.
 	XmlnsSvg = "http://www.w3.org/2000/svg"
 )
 
 const (
-  // FloatPrecision is the key used to configure the output floating point precison.
+	// FloatPrecision is the key used to configure the output floating point precison.
 	FloatPrecision = "floatPrecision"
 
-  // FloatPrecisionHighest represents the highest floating point precision available.
+	// FloatPrecisionHighest represents the highest floating point precision available.
 	FloatPrecisionHighest = -1
 )
 

@@ -202,7 +202,7 @@ type Ellipse interface {
 	Radii(p Point) Ellipse
 }
 
-// LinearGradient objects return a reference to a linear gradient which can be used 
+// LinearGradient objects return a reference to a linear gradient which can be used
 // as a fill or stroke for Paintable objects.
 type LinearGradient interface {
 	Referrable
