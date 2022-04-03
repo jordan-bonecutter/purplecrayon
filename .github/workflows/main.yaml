@@ -22,7 +22,7 @@ jobs:
         run: go vet . github.com/jordan-bonecutter/purplecrayon/svg
 
       - name: Run go lint
-				uses: Jerome1337/golint-action@v1.0.2
+        uses: Jerome1337/golint-action@v1.0.2
         with:
           golint-path: '. svg'
 
