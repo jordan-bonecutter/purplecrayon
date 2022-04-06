@@ -7,7 +7,7 @@
 // For simpler objects, like rectangles, circles, and ellipses svgo wins.
 // I believe this is due to the more complex function call structure of purplecrayon as compred to svgo.
 //
-// To alleivate this, I will add some methods to configure multiple parameters at once.
+// To alleviate this, I will add some methods to configure multiple parameters at once.
 //
 // Some notes on the test:
 // I try to be as fair as possible by doing the following 3 things:
