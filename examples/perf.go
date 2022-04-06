@@ -101,11 +101,11 @@ func drawSVGO(buf *bytes.Buffer) {
 
 	for ng := 0; ng < NUM_GRADIENTS; ng++ {
 		canv.LinearGradient(nextId(), 0, 0, 100, 100, []svgo.Offcolor{
-			svgo.Offcolor{
+			{
 				Offset:  10,
 				Color:   svgoRGB(200, 100, 50),
 				Opacity: 1.0,
-			}, svgo.Offcolor{
+			}, {
 				Offset:  90,
 				Color:   svgoRGB(50, 100, 200),
 				Opacity: 1.0,
